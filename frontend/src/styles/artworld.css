@@ -41,7 +41,7 @@
 
 /* Typography Classes */
 .hero-title {
-  font-family: var(--font-mono);
+  font-family: var(--font-sans);
   font-size: clamp(2.5rem, 5vw, 6rem);
   font-weight: 700;
   line-height: 1.1;
@@ -51,7 +51,7 @@
 }
 
 .section-title {
-  font-family: var(--font-mono);
+  font-family: var(--font-sans);
   font-size: clamp(2rem, 4vw, 3.5rem);
   font-weight: 600;
   line-height: 1.2;
