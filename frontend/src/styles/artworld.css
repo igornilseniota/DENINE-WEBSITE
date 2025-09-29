@@ -24,7 +24,7 @@
   --spacing-3xl: 6rem;
   
   /* Typography */
-  --font-serif: 'Playfair Display', serif;
+  --font-mono: 'JetBrains Mono', monospace;
   --font-sans: 'Inter', sans-serif;
   
   /* Transitions */
