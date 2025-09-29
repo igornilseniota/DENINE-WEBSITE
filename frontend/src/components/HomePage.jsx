@@ -112,6 +112,56 @@ export const HomePage = () => {
         </div>
       </section>
 
+      {/* Interior Mockups */}
+      <section className="section-spacing">
+        <div className="container-artworld">
+          <div className="text-center mb-xl">
+            <h2 className="section-title mb-md">In Your Space</h2>
+            <p className="body-text">
+              See how our prints transform modern living spaces with their sophisticated presence.
+            </p>
+          </div>
+          
+          <div className="artist-grid">
+            <div className="fade-in-up stagger-1">
+              <img 
+                src="https://images.unsplash.com/photo-1543487945-139a97f387d5" 
+                alt="Modern living room with wall art"
+                className="image-grid"
+                style={{borderRadius: '4px'}}
+              />
+              <div className="text-center mt-sm">
+                <h4 className="type-indicator">SINGLE STATEMENT PIECE</h4>
+              </div>
+            </div>
+            
+            <div className="fade-in-up stagger-2">
+              <img 
+                src="https://images.unsplash.com/photo-1583847268964-b28dc8f51f92" 
+                alt="Minimalist interior with paired prints"
+                className="image-grid"
+                style={{borderRadius: '4px'}}
+              />
+              <div className="text-center mt-sm">
+                <h4 className="type-indicator">HARMONIOUS PAIR</h4>
+              </div>
+            </div>
+            
+            <div className="fade-in-up stagger-3">
+              <img 
+                src="https://images.unsplash.com/photo-1705321963943-de94bb3f0dd3" 
+                alt="Modern space with triptych arrangement"
+                className="image-grid"
+                style={{borderRadius: '4px'}}
+              />
+              <div className="text-center mt-sm">
+                <h4 className="type-indicator">COMPLETE TRIPTYCH</h4>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Quality Promise */}
       <section className="section-spacing">
         <div className="container-artworld">
