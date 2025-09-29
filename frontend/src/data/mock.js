@@ -134,7 +134,7 @@ export const prints = [
 ];
 
 export const shippingInfo = {
-  size: '70x50cm',
+  size: '50x70cm',
   paper: 'Premium Fine Art Paper',
   delivery: '3-5 business days',
   shipping: 'Free worldwide shipping',
