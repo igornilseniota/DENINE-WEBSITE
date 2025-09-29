@@ -90,13 +90,49 @@ export const ProductPage = () => {
 
             {/* Variant Selection */}
             <div className="mb-lg">
-              <h3 className="artist-name mb-md">Choose Your Configuration</h3>
+              <h3 className="artist-name mb-md">Select Your Print(s)</h3>
+              
+              {/* Individual Variant Selection First */}
+              <div className="mb-lg">
+                <h4 className="nav-link mb-md">Choose Specific Variant(s):</h4>
+                <div style={{display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '0.5rem'}}>
+                  {print.variants.map((variant) => (
+                    <div 
+                      key={variant.id}
+                      className={`variant-option ${
+                        selectedVariants.some(v => v.id === variant.id) ? 'selected' : ''
+                      }`}
+                      onClick={() => handleVariantToggle(variant)}
+                      style={{padding: '0.75rem', cursor: 'pointer'}}
+                    >
+                      <img 
+                        src={variant.image} 
+                        alt={variant.name}
+                        style={{width: '100%', height: '80px', objectFit: 'cover', marginBottom: '0.5rem'}}
+                      />
+                      <div className="type-indicator" style={{fontSize: '0.75rem', marginBottom: '0.25rem'}}>
+                        {variant.name}
+                      </div>
+                      <div className="variant-price" style={{fontSize: '0.7rem'}}>
+                        ${print.price}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                <p className="caption-text mt-sm">
+                  Select {selectedVariants.length === 0 ? '1-3' : selectedVariants.length < 3 ? `${selectedVariants.length} more or finish selection` : 'up to 3'} variant(s). 
+                  Click variants above to select specific prints.
+                </p>
+              </div>
+
+              {/* Configuration Summary */}
               <div className="product-variants">
                 <div 
                   className={`variant-option ${
                     selectedVariants.length === 1 ? 'selected' : ''
                   }`}
-                  onClick={() => setSelectedVariants([print.variants[0]])}
+                  onClick={() => selectedVariants.length === 0 ? setSelectedVariants([print.variants[0]]) : null}
+                  style={{cursor: selectedVariants.length === 0 ? 'pointer' : 'default', opacity: selectedVariants.length === 1 ? 1 : 0.6}}
                 >
                   <div className="variant-number">1</div>
                   <div className="variant-label">Single Print</div>
@@ -107,7 +143,7 @@ export const ProductPage = () => {
                   className={`variant-option ${
                     selectedVariants.length === 2 ? 'selected' : ''
                   }`}
-                  onClick={() => setSelectedVariants(print.variants.slice(0, 2))}
+                  style={{cursor: 'default', opacity: selectedVariants.length === 2 ? 1 : 0.6}}
                 >
                   <div className="variant-number">2</div>
                   <div className="variant-label">Pair</div>
@@ -118,38 +154,12 @@ export const ProductPage = () => {
                   className={`variant-option ${
                     selectedVariants.length === 3 ? 'selected' : ''
                   }`}
-                  onClick={() => setSelectedVariants(print.variants)}
+                  style={{cursor: 'default', opacity: selectedVariants.length === 3 ? 1 : 0.6}}
                 >
                   <div className="variant-number">3</div>
                   <div className="variant-label">Triptych</div>
                   <div className="variant-price">${print.price * 3}</div>
                 </div>
-              </div>
-            </div>
-
-            {/* Individual Variant Selection */}
-            <div className="mb-lg">
-              <h4 className="nav-link mb-md">Selected Prints:</h4>
-              <div style={{display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '0.5rem'}}>
-                {print.variants.map((variant) => (
-                  <div 
-                    key={variant.id}
-                    className={`variant-option ${
-                      selectedVariants.some(v => v.id === variant.id) ? 'selected' : ''
-                    }`}
-                    onClick={() => handleVariantToggle(variant)}
-                    style={{padding: '0.5rem', cursor: 'pointer'}}
-                  >
-                    <img 
-                      src={variant.image} 
-                      alt={variant.name}
-                      style={{width: '100%', height: '60px', objectFit: 'cover', marginBottom: '0.25rem'}}
-                    />
-                    <div className="type-indicator" style={{fontSize: '0.6rem'}}>
-                      {variant.name.split(' ').pop()}
-                    </div>
-                  </div>
-                ))}
               </div>
             </div>
 
