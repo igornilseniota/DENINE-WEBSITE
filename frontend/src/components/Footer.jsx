@@ -29,7 +29,7 @@ export const Footer = () => {
           </div>
         </div>
         
-        <div className="text-center mt-xl pt-lg" style={{borderTop: '1px solid #374151'}}>
+        <div className="text-center" style={{marginTop: 'var(--spacing-xl)', paddingTop: 'var(--spacing-lg)', borderTop: '1px solid #374151'}}>
           <p className="caption-text">
             © 2024 DE---NINE. All rights reserved. | Premium fine art prints, worldwide shipping.
           </p>
