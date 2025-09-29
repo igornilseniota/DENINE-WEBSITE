@@ -94,45 +94,50 @@ export const ProductPage = () => {
               
               {/* Individual Variant Selection First */}
               <div className="mb-lg">
-                <h4 className="nav-link mb-md">Choose Specific Variant(s):</h4>
-                <div style={{display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '0.5rem'}}>
+                <h4 className="nav-link mb-md">Choose Specific Variant(s) - Click to Select:</h4>
+                <div className="variant-selection-grid">
                   {print.variants.map((variant) => (
                     <div 
                       key={variant.id}
-                      className={`variant-option ${
+                      className={`variant-thumbnail ${
                         selectedVariants.some(v => v.id === variant.id) ? 'selected' : ''
                       }`}
                       onClick={() => handleVariantToggle(variant)}
-                      style={{padding: '0.75rem', cursor: 'pointer'}}
                     >
-                      <img 
-                        src={variant.image} 
-                        alt={variant.name}
-                        style={{width: '100%', height: '80px', objectFit: 'cover', marginBottom: '0.5rem'}}
+                      <div 
+                        className="variant-image"
+                        style={{backgroundImage: `url(${variant.image})`}}
                       />
-                      <div className="type-indicator" style={{fontSize: '0.75rem', marginBottom: '0.25rem'}}>
-                        {variant.name}
-                      </div>
-                      <div className="variant-price" style={{fontSize: '0.7rem'}}>
-                        ${print.price}
+                      <div className="variant-info">
+                        <div className="variant-name">{variant.name}</div>
+                        <div className="variant-price-small">${print.price}</div>
                       </div>
                     </div>
                   ))}
                 </div>
-                <p className="caption-text mt-sm">
-                  Select {selectedVariants.length === 0 ? '1-3' : selectedVariants.length < 3 ? `${selectedVariants.length} more or finish selection` : 'up to 3'} variant(s). 
-                  Click variants above to select specific prints.
-                </p>
+                <div className="caption-text mt-sm" style={{
+                  padding: '0.75rem', 
+                  background: selectedVariants.length > 0 ? '#f0fdf4' : '#fef3c7',
+                  border: `1px solid ${selectedVariants.length > 0 ? '#bbf7d0' : '#fde68a'}`,
+                  borderRadius: '4px'
+                }}>
+                  {selectedVariants.length === 0 && '⚠️ Please select at least 1 variant above to continue'}
+                  {selectedVariants.length === 1 && '✅ 1 variant selected - You can add 2 more for a pair or triptych'}
+                  {selectedVariants.length === 2 && '✅ 2 variants selected - Perfect for a pair, or add 1 more for triptych'}
+                  {selectedVariants.length === 3 && '✅ 3 variants selected - Perfect for a triptych'}
+                </div>
               </div>
 
               {/* Configuration Summary */}
+              <div className="mb-md">
+                <h4 className="nav-link mb-sm">Your Selection Summary:</h4>
+              </div>
               <div className="product-variants">
                 <div 
                   className={`variant-option ${
                     selectedVariants.length === 1 ? 'selected' : ''
                   }`}
-                  onClick={() => selectedVariants.length === 0 ? setSelectedVariants([print.variants[0]]) : null}
-                  style={{cursor: selectedVariants.length === 0 ? 'pointer' : 'default', opacity: selectedVariants.length === 1 ? 1 : 0.6}}
+                  style={{cursor: 'default', opacity: selectedVariants.length === 1 ? 1 : 0.4}}
                 >
                   <div className="variant-number">1</div>
                   <div className="variant-label">Single Print</div>
@@ -143,7 +148,7 @@ export const ProductPage = () => {
                   className={`variant-option ${
                     selectedVariants.length === 2 ? 'selected' : ''
                   }`}
-                  style={{cursor: 'default', opacity: selectedVariants.length === 2 ? 1 : 0.6}}
+                  style={{cursor: 'default', opacity: selectedVariants.length === 2 ? 1 : 0.4}}
                 >
                   <div className="variant-number">2</div>
                   <div className="variant-label">Pair</div>
@@ -154,7 +159,7 @@ export const ProductPage = () => {
                   className={`variant-option ${
                     selectedVariants.length === 3 ? 'selected' : ''
                   }`}
-                  style={{cursor: 'default', opacity: selectedVariants.length === 3 ? 1 : 0.6}}
+                  style={{cursor: 'default', opacity: selectedVariants.length === 3 ? 1 : 0.4}}
                 >
                   <div className="variant-number">3</div>
                   <div className="variant-label">Triptych</div>
