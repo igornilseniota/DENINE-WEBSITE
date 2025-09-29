@@ -5,20 +5,11 @@ import HeroCarousel from './HeroCarousel';
 import '../styles/artworld.css';
 
 export const HomePage = () => {
-  // Get featured print for hero
-  const featuredPrint = prints[0];
-  const featuredVariant = featuredPrint.variants.find(v => v.featured);
-
   return (
     <div>
-      {/* Hero Section */}
+      {/* Hero Section with Carousel */}
       <section className="hero-section">
-        <img 
-          src={featuredVariant.image} 
-          alt={featuredPrint.theme}
-          className="hero-background"
-        />
-        <div className="hero-overlay"></div>
+        <HeroCarousel />
         <div className="hero-content">
           <h1 className="hero-title fade-in-up">Fine Art Prints</h1>
           <p className="body-text hero-subtitle fade-in-up stagger-1">
