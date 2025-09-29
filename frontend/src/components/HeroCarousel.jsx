@@ -38,6 +38,18 @@ export const HeroCarousel = () => {
         </div>
       ))}
       <div className="hero-overlay"></div>
+      
+      {/* Carousel Indicators */}
+      <div className="carousel-indicators">
+        {heroImages.map((_, index) => (
+          <button
+            key={index}
+            className={`carousel-dot ${index === currentSlide ? 'active' : ''}`}
+            onClick={() => setCurrentSlide(index)}
+            aria-label={`Go to slide ${index + 1}`}
+          />
+        ))}
+      </div>
     </div>
   );
 };
