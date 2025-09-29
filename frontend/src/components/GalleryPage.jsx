@@ -49,7 +49,7 @@ export const GalleryPage = () => {
             <h2 className="section-title mb-md">About Our Prints</h2>
             <div className="body-text" style={{maxWidth: '600px', margin: '0 auto'}}>
               <p className="mb-md">
-                Each print in our collection is carefully produced on premium 70x50cm fine art paper, 
+                Each print in our collection is carefully produced on premium 50x70cm fine art paper, 
                 ensuring exceptional quality and longevity.
               </p>
               <p>
