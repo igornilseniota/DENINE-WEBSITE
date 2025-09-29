@@ -156,7 +156,7 @@ export const HomePage = () => {
           <div className="artist-grid">
             {testimonials.map((testimonial, index) => (
               <div key={index} className={`text-center fade-in-up stagger-${index + 1}`}>
-                <p className="body-text mb-md italic">"{testimonial.text}"</p>
+                <p className="body-text mb-md" style={{fontStyle: 'italic'}}>"{testimonial.text}"</p>
                 <div>
                   <h4 className="nav-link mb-xs">{testimonial.name}</h4>
                   <p className="caption-text">{testimonial.location}</p>
