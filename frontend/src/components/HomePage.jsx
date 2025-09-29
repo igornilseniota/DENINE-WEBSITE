@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { prints, testimonials, shippingInfo } from '../data/mock';
+import HeroCarousel from './HeroCarousel';
 import '../styles/artworld.css';
 
 export const HomePage = () => {
