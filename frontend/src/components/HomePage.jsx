@@ -21,7 +21,7 @@ export const HomePage = () => {
         <div className="hero-content">
           <h1 className="hero-title fade-in-up">Fine Art Prints</h1>
           <p className="body-text hero-subtitle fade-in-up stagger-1">
-            Premium 70x50cm prints on fine art paper. Beautiful alone, stunning as pairs or triptychs.
+            Premium 50x70cm prints on fine art paper. Beautiful alone, stunning as pairs or triptychs.
           </p>
           <Link to="/gallery" className="btn-primary fade-in-up stagger-2">
             Explore Gallery
