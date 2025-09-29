@@ -122,7 +122,7 @@ export const HomePage = () => {
             </p>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '2rem'}}>
             <div className="text-center">
               <h4 className="nav-link mb-sm">{shippingInfo.size}</h4>
               <p className="caption-text">Standard size for perfect impact</p>
