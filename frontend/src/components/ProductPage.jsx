@@ -198,11 +198,12 @@ export const ProductPage = () => {
 
             {/* Add to Cart */}
             <button 
-              className="btn-primary" 
+              className={`btn-primary ${selectedVariants.length === 0 ? 'opacity-50 cursor-not-allowed' : ''}`}
               onClick={addToCart}
+              disabled={selectedVariants.length === 0}
               style={{width: '100%', marginBottom: 'var(--spacing-lg)'}}
             >
-              Add to Cart
+              {selectedVariants.length === 0 ? 'Select Variants First' : 'Add to Cart'}
             </button>
 
             {/* Product Details */}
