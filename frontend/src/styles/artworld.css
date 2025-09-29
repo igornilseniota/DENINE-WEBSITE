@@ -187,6 +187,18 @@
   box-shadow: var(--shadow-md);
 }
 
+.btn-primary:disabled {
+  background-color: var(--color-gray-400);
+  cursor: not-allowed;
+  transform: none;
+}
+
+.btn-primary:disabled:hover {
+  background-color: var(--color-gray-400);
+  transform: none;
+  box-shadow: var(--shadow-sm);
+}
+
 .btn-secondary {
   display: inline-flex;
   align-items: center;
