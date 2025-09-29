@@ -435,10 +435,12 @@
 }
 
 .footer-section h4 {
-  font-family: var(--font-serif);
+  font-family: var(--font-mono);
   font-size: 1.25rem;
   font-weight: 500;
   margin-bottom: var(--spacing-md);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
 }
 
 .footer-section p,
