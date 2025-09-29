@@ -54,8 +54,8 @@ export const HomePage = () => {
                   <div className="card-content">
                     <h3 className="artist-name mb-xs">{print.theme}</h3>
                     <p className="caption-text mb-md">{print.description}</p>
-                    <div className="flex justify-between items-center">
-                      <span className="body-text font-medium">${print.price}</span>
+                    <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
+                      <span className="body-text" style={{fontWeight: '500'}}>${print.price}</span>
                       <Link to={`/print/${print.id}`} className="btn-secondary">
                         View Collection
                       </Link>
