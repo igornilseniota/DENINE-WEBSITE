@@ -188,7 +188,7 @@ def test_cart_management():
                 # Get the cart item ID for removal test
                 items = cart_data.get("items", [])
                 if items:
-                    cart_item_id = str(items[0].get("_id"))
+                    cart_item_id = str(items[0].get("id"))
             else:
                 print_error("Add to cart failed - cart still empty")
         else:
