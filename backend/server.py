@@ -133,6 +133,8 @@ class CartItem(BaseModel):
     updated_at: datetime = Field(default_factory=datetime.utcnow)
 
 class PaymentTransaction(BaseModel):
+    model_config = ConfigDict(arbitrary_types_allowed=True, populate_by_name=True)
+    
     id: Optional[PyObjectId] = Field(default_factory=PyObjectId, alias="_id")
     session_id: str
     payment_method: str  # "stripe", "paypal", "vipps"
@@ -145,10 +147,6 @@ class PaymentTransaction(BaseModel):
     metadata: Dict[str, str] = {}
     created_at: datetime = Field(default_factory=datetime.utcnow)
     updated_at: datetime = Field(default_factory=datetime.utcnow)
-    
-    class Config:
-        allow_population_by_field_name = True
-        json_encoders = {ObjectId: str}
 
 class Order(BaseModel):
     id: Optional[PyObjectId] = Field(default_factory=PyObjectId, alias="_id")
