@@ -1,9 +1,60 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { prints } from '../data/mock';
+import axios from 'axios';
 import '../styles/artworld.css';
 
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+const API = `${BACKEND_URL}/api`;
+
 export const GalleryPage = () => {
+  const [prints, setPrints] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    fetchPrints();
+  }, []);
+
+  const fetchPrints = async () => {
+    try {
+      setLoading(true);
+      const response = await axios.get(`${API}/prints`);
+      setPrints(response.data.prints || []);
+    } catch (err) {
+      console.error('Error fetching prints:', err);
+      setError('Failed to load prints. Please try again later.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="section-spacing">
+        <div className="container-artworld text-center">
+          <h1 className="section-title mb-md">Loading Gallery...</h1>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="section-spacing">
+        <div className="container-artworld text-center">
+          <h1 className="section-title mb-md">Gallery</h1>
+          <p className="body-text" style={{color: '#dc2626'}}>{error}</p>
+          <button 
+            onClick={fetchPrints}
+            className="btn-primary mt-lg"
+          >
+            Try Again
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="section-spacing">
       <div className="container-artworld">
@@ -20,10 +71,10 @@ export const GalleryPage = () => {
           {prints.map((print, index) => {
             const featuredVariant = print.variants.find(v => v.featured);
             return (
-              <div key={print.id} className={`card-artworld fade-in-up stagger-${(index % 3) + 1}`}>
-                <Link to={`/print/${print.id}`}>
+              <div key={print.theme_id} className={`card-artworld fade-in-up stagger-${(index % 3) + 1}`}>
+                <Link to={`/print/${print.theme_id}`}>
                   <img 
-                    src={featuredVariant.image} 
+                    src={featuredVariant?.image_url} 
                     alt={print.theme}
                     className="image-grid"
                   />
@@ -32,8 +83,8 @@ export const GalleryPage = () => {
                   <h3 className="artist-name mb-xs">{print.theme}</h3>
                   <p className="caption-text mb-md">{print.description}</p>
                   <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
-                    <span className="body-text" style={{fontWeight: '500'}}>${print.price}</span>
-                    <Link to={`/print/${print.id}`} className="btn-secondary">
+                    <span className="body-text" style={{fontWeight: '500'}}>NOK {(print.base_price / 100).toFixed(0)}</span>
+                    <Link to={`/print/${print.theme_id}`} className="btn-secondary">
                       View Collection
                     </Link>
                   </div>
