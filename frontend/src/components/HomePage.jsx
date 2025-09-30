@@ -1,10 +1,33 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { prints, testimonials, shippingInfo } from '../data/mock';
+import { testimonials, shippingInfo } from '../data/mock';
 import HeroCarousel from './HeroCarousel';
+import axios from 'axios';
 import '../styles/artworld.css';
 
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+const API = `${BACKEND_URL}/api`;
+
 export const HomePage = () => {
+  const [prints, setPrints] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchPrints();
+  }, []);
+
+  const fetchPrints = async () => {
+    try {
+      const response = await axios.get(`${API}/prints`);
+      setPrints(response.data.prints || []);
+    } catch (err) {
+      console.error('Error fetching prints:', err);
+      // Fallback to empty array if API fails
+      setPrints([]);
+    } finally {
+      setLoading(false);
+    }
+  };
   return (
     <div>
       {/* Hero Section with Carousel */}
