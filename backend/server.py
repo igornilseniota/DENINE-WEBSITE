@@ -190,6 +190,11 @@ async def calculate_cart_total(session_id: str) -> Dict[str, Any]:
     """Calculate cart totals"""
     cart_items = await db.cart_items.find({"session_id": session_id}).to_list(1000)
     
+    # Convert ObjectId to string for JSON serialization
+    for item in cart_items:
+        item["id"] = str(item["_id"])
+        del item["_id"]
+    
     subtotal = sum(item["total_price"] for item in cart_items)
     shipping = 0  # Free shipping
     total = subtotal + shipping
