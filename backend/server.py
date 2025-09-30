@@ -149,6 +149,8 @@ class PaymentTransaction(BaseModel):
     updated_at: datetime = Field(default_factory=datetime.utcnow)
 
 class Order(BaseModel):
+    model_config = ConfigDict(arbitrary_types_allowed=True, populate_by_name=True)
+    
     id: Optional[PyObjectId] = Field(default_factory=PyObjectId, alias="_id")
     order_number: str
     session_id: str
@@ -163,10 +165,6 @@ class Order(BaseModel):
     customer_info: Optional[Dict[str, str]] = None
     created_at: datetime = Field(default_factory=datetime.utcnow)
     updated_at: datetime = Field(default_factory=datetime.utcnow)
-    
-    class Config:
-        allow_population_by_field_name = True
-        json_encoders = {ObjectId: str}
 
 # Request/Response models
 class CreatePaymentRequest(BaseModel):
