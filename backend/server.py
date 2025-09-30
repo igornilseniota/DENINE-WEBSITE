@@ -79,7 +79,7 @@ app.add_middleware(
 api_router = APIRouter(prefix="/api")
 
 # Pydantic models
-from pydantic import BaseModel, Field, ConfigDict
+from pydantic import ConfigDict
 from pydantic_core import core_schema
 from typing_extensions import Annotated
 
