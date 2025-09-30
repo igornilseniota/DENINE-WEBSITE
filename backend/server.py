@@ -107,6 +107,8 @@ class PrintVariant(BaseModel):
     created_at: datetime = Field(default_factory=datetime.utcnow)
 
 class PrintTheme(BaseModel):
+    model_config = ConfigDict(arbitrary_types_allowed=True, populate_by_name=True)
+    
     id: Optional[PyObjectId] = Field(default_factory=PyObjectId, alias="_id")
     theme_id: str
     theme: str
@@ -115,10 +117,6 @@ class PrintTheme(BaseModel):
     variants: List[PrintVariant]
     created_at: datetime = Field(default_factory=datetime.utcnow)
     updated_at: datetime = Field(default_factory=datetime.utcnow)
-    
-    class Config:
-        allow_population_by_field_name = True
-        json_encoders = {ObjectId: str}
 
 class CartItem(BaseModel):
     id: Optional[PyObjectId] = Field(default_factory=PyObjectId, alias="_id")
