@@ -58,10 +58,10 @@ export const HomePage = () => {
             {prints.slice(0, 3).map((print, index) => {
               const featuredVariant = print.variants.find(v => v.featured);
               return (
-                <div key={print.id} className={`card-artworld fade-in-up stagger-${index + 1}`}>
-                  <Link to={`/print/${print.id}`}>
+                <div key={print.theme_id} className={`card-artworld fade-in-up stagger-${index + 1}`}>
+                  <Link to={`/print/${print.theme_id}`}>
                     <img 
-                      src={featuredVariant.image} 
+                      src={featuredVariant?.image_url} 
                       alt={print.theme}
                       className="image-grid"
                     />
@@ -70,8 +70,8 @@ export const HomePage = () => {
                     <h3 className="artist-name mb-xs">{print.theme}</h3>
                     <p className="caption-text mb-md">{print.description}</p>
                     <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
-                      <span className="body-text" style={{fontWeight: '500'}}>${print.price}</span>
-                      <Link to={`/print/${print.id}`} className="btn-secondary">
+                      <span className="body-text" style={{fontWeight: '500'}}>NOK {(print.base_price / 100).toFixed(0)}</span>
+                      <Link to={`/print/${print.theme_id}`} className="btn-secondary">
                         View Collection
                       </Link>
                     </div>
