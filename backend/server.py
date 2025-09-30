@@ -269,7 +269,7 @@ async def add_to_cart(
         )
         
         # Insert into database
-        result = await db.cart_items.insert_one(cart_item.dict(by_alias=True, exclude_unset=True))
+        await db.cart_items.insert_one(cart_item.dict(by_alias=True, exclude_unset=True))
         
         # Return updated cart
         cart_data = await calculate_cart_total(session_id)
