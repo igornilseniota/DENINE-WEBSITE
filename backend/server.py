@@ -119,6 +119,8 @@ class PrintTheme(BaseModel):
     updated_at: datetime = Field(default_factory=datetime.utcnow)
 
 class CartItem(BaseModel):
+    model_config = ConfigDict(arbitrary_types_allowed=True, populate_by_name=True)
+    
     id: Optional[PyObjectId] = Field(default_factory=PyObjectId, alias="_id")
     session_id: str
     user_id: Optional[str] = None
@@ -129,10 +131,6 @@ class CartItem(BaseModel):
     total_price: int
     created_at: datetime = Field(default_factory=datetime.utcnow)
     updated_at: datetime = Field(default_factory=datetime.utcnow)
-    
-    class Config:
-        allow_population_by_field_name = True
-        json_encoders = {ObjectId: str}
 
 class PaymentTransaction(BaseModel):
     id: Optional[PyObjectId] = Field(default_factory=PyObjectId, alias="_id")
