@@ -79,20 +79,25 @@ app.add_middleware(
 api_router = APIRouter(prefix="/api")
 
 # Pydantic models
+from pydantic import BaseModel, Field, ConfigDict
+from pydantic_core import core_schema
+from typing_extensions import Annotated
+
 class PyObjectId(ObjectId):
     @classmethod
-    def __get_validators__(cls):
-        yield cls.validate
-
+    def __get_pydantic_core_schema__(
+        cls, source_type, handler
+    ) -> core_schema.CoreSchema:
+        return core_schema.with_info_plain_validator_function(cls.validate)
+    
     @classmethod
-    def validate(cls, v):
-        if not ObjectId.is_valid(v):
-            raise ValueError('Invalid objectid')
-        return ObjectId(v)
+    def validate(cls, value, info=None):
+        if not ObjectId.is_valid(value):
+            raise ValueError('Invalid ObjectId')
+        return ObjectId(value)
 
-    @classmethod
-    def __modify_schema__(cls, field_schema):
-        field_schema.update(type='string')
+    def __str__(self):
+        return str(self)
 
 class PrintVariant(BaseModel):
     id: str
