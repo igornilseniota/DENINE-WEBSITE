@@ -105,9 +105,6 @@ class PrintVariant(BaseModel):
     image_url: str
     featured: bool = False
     created_at: datetime = Field(default_factory=datetime.utcnow)
-    
-    class Config:
-        json_encoders = {ObjectId: str}
 
 class PrintTheme(BaseModel):
     id: Optional[PyObjectId] = Field(default_factory=PyObjectId, alias="_id")
