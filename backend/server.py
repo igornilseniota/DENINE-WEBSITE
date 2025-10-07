@@ -562,77 +562,77 @@ async def admin_update_print(
         logger.error(f"Error updating print {theme_id}: {str(e)}")
         raise HTTPException(status_code=500, detail="Failed to update print")
 
-@api_router.post(\"/admin/prints\")
+@api_router.post("/admin/prints")
 async def admin_create_print(
     print_data: Dict[str, Any],
     db=Depends(get_database)
 ):
-    \"\"\"Admin: Create new print theme\"\"\"
+    """Admin: Create new print theme"""
     try:
         # Create new print theme with default variants
         new_print = {
-            \"theme_id\": print_data[\"theme_id\"],
-            \"theme\": print_data[\"theme\"],
-            \"description\": print_data.get(\"description\", \"\"),
-            \"base_price\": print_data.get(\"base_price\", 19900),
-            \"variants\": [
+            "theme_id": print_data["theme_id"],
+            "theme": print_data["theme"],
+            "description": print_data.get("description", ""),
+            "base_price": print_data.get("base_price", 19900),
+            "variants": [
                 {
-                    \"id\": f\"{print_data['theme_id']}-v1\",
-                    \"name\": f\"{print_data['theme']} I\",
-                    \"image_url\": \"https://via.placeholder.com/500x700?text=Upload+Image\",
-                    \"featured\": True,
-                    \"created_at\": datetime.utcnow()
+                    "id": f"{print_data['theme_id']}-v1",
+                    "name": f"{print_data['theme']} I",
+                    "image_url": "https://via.placeholder.com/500x700?text=Upload+Image",
+                    "featured": True,
+                    "created_at": datetime.utcnow()
                 },
                 {
-                    \"id\": f\"{print_data['theme_id']}-v2\",
-                    \"name\": f\"{print_data['theme']} II\",
-                    \"image_url\": \"https://via.placeholder.com/500x700?text=Upload+Image\",
-                    \"featured\": False,
-                    \"created_at\": datetime.utcnow()
+                    "id": f"{print_data['theme_id']}-v2",
+                    "name": f"{print_data['theme']} II",
+                    "image_url": "https://via.placeholder.com/500x700?text=Upload+Image",
+                    "featured": False,
+                    "created_at": datetime.utcnow()
                 },
                 {
-                    \"id\": f\"{print_data['theme_id']}-v3\",
-                    \"name\": f\"{print_data['theme']} III\",
-                    \"image_url\": \"https://via.placeholder.com/500x700?text=Upload+Image\",
-                    \"featured\": False,
-                    \"created_at\": datetime.utcnow()
+                    "id": f"{print_data['theme_id']}-v3",
+                    "name": f"{print_data['theme']} III",
+                    "image_url": "https://via.placeholder.com/500x700?text=Upload+Image",
+                    "featured": False,
+                    "created_at": datetime.utcnow()
                 }
             ],
-            \"created_at\": datetime.utcnow(),
-            \"updated_at\": datetime.utcnow()
+            "created_at": datetime.utcnow(),
+            "updated_at": datetime.utcnow()
         }
         
         # Insert into database
         result = await db.print_themes.insert_one(new_print)
         
         # Return created print
-        created_print = await db.print_themes.find_one({\"_id\": result.inserted_id})
-        created_print[\"id\"] = str(created_print[\"_id\"])
-        del created_print[\"_id\"]
+        created_print = await db.print_themes.find_one({"_id": result.inserted_id})
+        created_print["id"] = str(created_print["_id"])
+        del created_print["_id"]
         
         return created_print
     except Exception as e:
-        logger.error(f\"Error creating print: {str(e)}\")
-        raise HTTPException(status_code=500, detail=\"Failed to create print\")
+        logger.error(f"Error creating print: {str(e)}")
+        raise HTTPException(status_code=500, detail="Failed to create print")
 
-@api_router.delete(\"/admin/prints/{theme_id}\")
+@api_router.delete("/admin/prints/{theme_id}")
 async def admin_delete_print(
     theme_id: str,
     db=Depends(get_database)
 ):
-    \"\"\"Admin: Delete print theme\"\"\"
+    """Admin: Delete print theme"""
     try:
-        result = await db.print_themes.delete_one({\"theme_id\": theme_id})
+        result = await db.print_themes.delete_one({"theme_id": theme_id})
         
         if result.deleted_count == 0:
-            raise HTTPException(status_code=404, detail=\"Print theme not found\")
+            raise HTTPException(status_code=404, detail="Print theme not found")
         
-        return {\"message\": \"Print theme deleted successfully\"}
+        return {"message": "Print theme deleted successfully"}
     except HTTPException:
         raise
     except Exception as e:
-        logger.error(f\"Error deleting print {theme_id}: {str(e)}\")
-        raise HTTPException(status_code=500, detail=\"Failed to delete print\")\n\n# Root endpoint
+        logger.error(f"Error deleting print {theme_id}: {str(e)}")
+        raise HTTPException(status_code=500, detail="Failed to delete print")\n\n# Root endpoint
 @api_router.get("/")
 async def root():
     return {"message": "DE---NINE Art Store API", "status": "running"}
