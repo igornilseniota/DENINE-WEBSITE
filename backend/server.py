@@ -634,6 +634,172 @@ async def admin_delete_print(
         logger.error(f"Error deleting print {theme_id}: {str(e)}")
         raise HTTPException(status_code=500, detail="Failed to delete print")
 
+# Admin endpoints
+@api_router.get("/admin/prints")
+async def admin_get_prints(db=Depends(get_database)):
+    """Admin: Get all prints with full details"""
+    try:
+        prints_cursor = db.print_themes.find({})
+        prints = await prints_cursor.to_list(1000)
+        
+        # Convert ObjectId to string for JSON serialization
+        for print_item in prints:
+            print_item["id"] = str(print_item["_id"])
+            del print_item["_id"]
+            
+        return {"prints": prints}
+    except Exception as e:
+        logger.error(f"Error fetching prints for admin: {str(e)}")
+        raise HTTPException(status_code=500, detail="Failed to fetch prints")
+
+@api_router.put("/admin/prints/{theme_id}")
+async def admin_update_print(
+    theme_id: str,
+    update_data: Dict[str, Any],
+    db=Depends(get_database)
+):
+    """Admin: Update print theme"""
+    try:
+        # Update the print theme
+        result = await db.print_themes.update_one(
+            {"theme_id": theme_id},
+            {
+                "$set": {
+                    **update_data,
+                    "updated_at": datetime.utcnow()
+                }
+            }
+        )
+        
+        if result.matched_count == 0:
+            raise HTTPException(status_code=404, detail="Print theme not found")
+        
+        # Return updated print
+        updated_print = await db.print_themes.find_one({"theme_id": theme_id})
+        updated_print["id"] = str(updated_print["_id"])
+        del updated_print["_id"]
+        
+        return updated_print
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error updating print {theme_id}: {str(e)}")
+        raise HTTPException(status_code=500, detail="Failed to update print")
+
+@api_router.delete("/admin/prints/{theme_id}")
+async def admin_delete_print(theme_id: str, db=Depends(get_database)):
+    """Admin: Delete print theme"""
+    try:
+        result = await db.print_themes.delete_one({"theme_id": theme_id})
+        
+        if result.deleted_count == 0:
+            raise HTTPException(status_code=404, detail="Print theme not found")
+        
+        return {"message": "Print theme deleted successfully"}
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error deleting print {theme_id}: {str(e)}")
+        raise HTTPException(status_code=500, detail="Failed to delete print")
+
+@api_router.post("/admin/prints")
+async def admin_create_print(print_data: Dict[str, Any], db=Depends(get_database)):
+    """Admin: Create new print theme"""
+    try:
+        # Create new print theme with default variants
+        new_print = {
+            "theme_id": print_data["theme_id"],
+            "theme": print_data["theme"],
+            "description": print_data.get("description", ""),
+            "base_price": print_data.get("base_price", 19900),
+            "variants": [
+                {
+                    "id": f"{print_data['theme_id']}-v1",
+                    "name": f"{print_data['theme']} I",
+                    "image_url": print_data.get("image_urls", ["https://via.placeholder.com/500x700?text=Upload+Image"])[0],
+                    "featured": True,
+                    "created_at": datetime.utcnow()
+                },
+                {
+                    "id": f"{print_data['theme_id']}-v2", 
+                    "name": f"{print_data['theme']} II",
+                    "image_url": print_data.get("image_urls", ["", "https://via.placeholder.com/500x700?text=Upload+Image"])[1] or "https://via.placeholder.com/500x700?text=Upload+Image",
+                    "featured": False,
+                    "created_at": datetime.utcnow()
+                },
+                {
+                    "id": f"{print_data['theme_id']}-v3",
+                    "name": f"{print_data['theme']} III", 
+                    "image_url": print_data.get("image_urls", ["", "", "https://via.placeholder.com/500x700?text=Upload+Image"])[2] or "https://via.placeholder.com/500x700?text=Upload+Image",
+                    "featured": False,
+                    "created_at": datetime.utcnow()
+                }
+            ],
+            "created_at": datetime.utcnow(),
+            "updated_at": datetime.utcnow()
+        }
+        
+        # Insert into database
+        result = await db.print_themes.insert_one(new_print)
+        
+        # Return created print
+        created_print = await db.print_themes.find_one({"_id": result.inserted_id})
+        created_print["id"] = str(created_print["_id"])
+        del created_print["_id"]
+        
+        return created_print
+    except Exception as e:
+        logger.error(f"Error creating print: {str(e)}")
+        raise HTTPException(status_code=500, detail="Failed to create print")
+
+# Page content management
+@api_router.get("/admin/pages")
+async def admin_get_pages(db=Depends(get_database)):
+    """Admin: Get page content"""
+    try:
+        pages = await db.page_content.find({}).to_list(100)
+        
+        # Convert ObjectId to string
+        for page in pages:
+            page["id"] = str(page["_id"])
+            del page["_id"]
+            
+        return {"pages": pages}
+    except Exception as e:
+        logger.error(f"Error fetching pages: {str(e)}")
+        raise HTTPException(status_code=500, detail="Failed to fetch pages")
+
+@api_router.put("/admin/pages/{page_id}")
+async def admin_update_page(
+    page_id: str,
+    page_data: Dict[str, Any],
+    db=Depends(get_database)
+):
+    """Admin: Update page content"""
+    try:
+        # Update or insert page content
+        result = await db.page_content.update_one(
+            {"page_id": page_id},
+            {
+                "$set": {
+                    **page_data,
+                    "updated_at": datetime.utcnow()
+                }
+            },
+            upsert=True
+        )
+        
+        # Return updated page
+        updated_page = await db.page_content.find_one({"page_id": page_id})
+        if updated_page:
+            updated_page["id"] = str(updated_page["_id"])
+            del updated_page["_id"]
+        
+        return updated_page or {"message": "Page updated successfully"}
+    except Exception as e:
+        logger.error(f"Error updating page {page_id}: {str(e)}")
+        raise HTTPException(status_code=500, detail="Failed to update page")
+
 # Root endpoint
 @api_router.get("/")
 async def root():
