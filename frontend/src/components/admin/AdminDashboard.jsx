@@ -61,6 +61,7 @@ const AdminDashboard = ({ onLogout }) => {
           <div style={{display: 'flex', gap: 'var(--spacing-md)', borderBottom: '1px solid var(--color-gray-300)'}}>
             {[
               { key: 'prints', label: 'Print Management' },
+              { key: 'pages', label: 'Page Content' },
               { key: 'orders', label: 'Orders' },
               { key: 'analytics', label: 'Analytics' }
             ].map(tab => (
