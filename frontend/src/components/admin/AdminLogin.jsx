@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import '../styles/artworld.css';
+import '../../styles/artworld.css';
 
 const AdminLogin = ({ onLogin }) => {
   const [credentials, setCredentials] = useState({ username: '', password: '' });
