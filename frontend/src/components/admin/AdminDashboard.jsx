@@ -94,6 +94,10 @@ const AdminDashboard = ({ onLogout }) => {
         {activeTab === 'analytics' && (
           <Analytics prints={prints} orders={orders} />
         )}
+
+        {activeTab === 'pages' && (
+          <PageManagement />
+        )}
       </div>
     </div>
   );
