@@ -21,6 +21,7 @@ function App() {
             <Route path="/gallery" element={<GalleryPage />} />
             <Route path="/print/:id" element={<ProductPage />} />
             <Route path="/cart" element={<CartPage />} />
+            <Route path="/admin" element={<AdminMain />} />
             <Route path="/about" element={<div className="container-artworld section-spacing"><h1 className="section-title text-center">About - Coming Soon</h1></div>} />
             <Route path="/contact" element={<div className="container-artworld section-spacing"><h1 className="section-title text-center">Contact - Coming Soon</h1></div>} />
           </Routes>
