@@ -216,9 +216,19 @@ const EditPrintModal = ({ print, onClose, onSave }) => {
   const [formData, setFormData] = useState({
     theme: print.theme,
     description: print.description,
-    base_price: print.base_price
+    base_price: print.base_price,
+    variants: print.variants
   });
   const [saving, setSaving] = useState(false);
+
+  const handleVariantImageUpdate = (variantIndex, newImageUrl) => {
+    const updatedVariants = [...formData.variants];
+    updatedVariants[variantIndex] = {
+      ...updatedVariants[variantIndex],
+      image_url: newImageUrl
+    };
+    setFormData({...formData, variants: updatedVariants});
+  };
 
   const handleSave = async () => {
     setSaving(true);
@@ -246,7 +256,7 @@ const EditPrintModal = ({ print, onClose, onSave }) => {
       justifyContent: 'center',
       zIndex: 1000
     }}>
-      <div className="card-artworld" style={{maxWidth: '600px', width: '90%', maxHeight: '90vh', overflow: 'auto'}}>
+      <div className="card-artworld" style={{maxWidth: '800px', width: '90%', maxHeight: '90vh', overflow: 'auto'}}>
         <div style={{padding: 'var(--spacing-xl)'}}>
           <h2 className="artist-name mb-lg">Edit: {print.theme}</h2>
           
@@ -297,6 +307,43 @@ const EditPrintModal = ({ print, onClose, onSave }) => {
                 fontFamily: 'var(--font-sans)'
               }}
             />
+          </div>
+
+          {/* Image Upload for Variants */}
+          <div className="mb-lg">
+            <label className="nav-link mb-sm" style={{display: 'block'}}>Variant Images</label>
+            <div style={{display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 'var(--spacing-md)'}}>
+              {formData.variants.map((variant, index) => (
+                <div key={variant.id} style={{textAlign: 'center'}}>
+                  <img 
+                    src={variant.image_url}
+                    alt={variant.name}
+                    style={{
+                      width: '100%',
+                      height: '120px',
+                      objectFit: 'cover',
+                      marginBottom: 'var(--spacing-sm)',
+                      border: '1px solid var(--color-gray-300)'
+                    }}
+                  />
+                  <div className="type-indicator mb-sm">{variant.name}</div>
+                  <input
+                    type="url"
+                    placeholder="Image URL"
+                    value={variant.image_url}
+                    onChange={(e) => handleVariantImageUpdate(index, e.target.value)}
+                    style={{
+                      width: '100%',
+                      padding: '0.5rem',
+                      fontSize: '0.75rem',
+                      border: '1px solid var(--color-gray-300)',
+                      borderRadius: '4px',
+                      fontFamily: 'var(--font-sans)'
+                    }}
+                  />
+                </div>
+              ))}
+            </div>
           </div>
           
           <div style={{display: 'flex', gap: 'var(--spacing-md)', justifyContent: 'flex-end'}}>
