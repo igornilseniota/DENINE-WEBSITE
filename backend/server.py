@@ -632,7 +632,9 @@ async def admin_delete_print(
         raise
     except Exception as e:
         logger.error(f"Error deleting print {theme_id}: {str(e)}")
-        raise HTTPException(status_code=500, detail="Failed to delete print")\n\n# Root endpoint
+        raise HTTPException(status_code=500, detail="Failed to delete print")
+
+# Root endpoint
 @api_router.get("/")
 async def root():
     return {"message": "DE---NINE Art Store API", "status": "running"}
