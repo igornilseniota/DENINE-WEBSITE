@@ -511,56 +511,56 @@ async def get_orders(
         raise HTTPException(status_code=500, detail="Failed to fetch orders")
 
 # Admin endpoints
-@api_router.get(\"/admin/prints\")
+@api_router.get("/admin/prints")
 async def admin_get_prints(db=Depends(get_database)):
-    \"\"\"Admin: Get all prints with full details\"\"\"
+    """Admin: Get all prints with full details"""
     try:
         prints_cursor = db.print_themes.find({})
         prints = await prints_cursor.to_list(1000)
         
         # Convert ObjectId to string for JSON serialization
         for print_item in prints:
-            print_item[\"id\"] = str(print_item[\"_id\"])
-            del print_item[\"_id\"]
+            print_item["id"] = str(print_item["_id"])
+            del print_item["_id"]
             
-        return {\"prints\": prints}
+        return {"prints": prints}
     except Exception as e:
-        logger.error(f\"Error fetching prints for admin: {str(e)}\")
-        raise HTTPException(status_code=500, detail=\"Failed to fetch prints\")
+        logger.error(f"Error fetching prints for admin: {str(e)}")
+        raise HTTPException(status_code=500, detail="Failed to fetch prints")
 
-@api_router.put(\"/admin/prints/{theme_id}\")
+@api_router.put("/admin/prints/{theme_id}")
 async def admin_update_print(
     theme_id: str,
     update_data: Dict[str, Any],
     db=Depends(get_database)
 ):
-    \"\"\"Admin: Update print theme\"\"\"
+    """Admin: Update print theme"""
     try:
         # Update the print theme
         result = await db.print_themes.update_one(
-            {\"theme_id\": theme_id},
+            {"theme_id": theme_id},
             {
-                \"$set\": {
+                "$set": {
                     **update_data,
-                    \"updated_at\": datetime.utcnow()
+                    "updated_at": datetime.utcnow()
                 }
             }
         )
         
         if result.matched_count == 0:
-            raise HTTPException(status_code=404, detail=\"Print theme not found\")
+            raise HTTPException(status_code=404, detail="Print theme not found")
         
         # Return updated print
-        updated_print = await db.print_themes.find_one({\"theme_id\": theme_id})
-        updated_print[\"id\"] = str(updated_print[\"_id\"])
-        del updated_print[\"_id\"]
+        updated_print = await db.print_themes.find_one({"theme_id": theme_id})
+        updated_print["id"] = str(updated_print["_id"])
+        del updated_print["_id"]
         
         return updated_print
     except HTTPException:
         raise
     except Exception as e:
-        logger.error(f\"Error updating print {theme_id}: {str(e)}\")
-        raise HTTPException(status_code=500, detail=\"Failed to update print\")
+        logger.error(f"Error updating print {theme_id}: {str(e)}")
+        raise HTTPException(status_code=500, detail="Failed to update print")
 
 @api_router.post(\"/admin/prints\")
 async def admin_create_print(
