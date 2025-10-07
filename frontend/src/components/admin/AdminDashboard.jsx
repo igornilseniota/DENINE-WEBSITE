@@ -19,7 +19,7 @@ const AdminDashboard = ({ onLogout }) => {
     try {
       setLoading(true);
       const [printsRes] = await Promise.all([
-        axios.get(`${API}/admin/prints`)
+        axios.get(`${API}/prints`)
         // Add orders endpoint when ready
       ]);
       setPrints(printsRes.data.prints || []);
