@@ -510,7 +510,179 @@ const OrderManagement = ({ orders }) => {
   );
 };
 
-// Analytics Component
+// Page Management Component
+const PageManagement = () => {
+  const [pages, setPages] = useState([]);
+  const [editingPage, setEditingPage] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchPages();
+  }, []);
+
+  const fetchPages = async () => {
+    try {
+      setLoading(true);
+      const response = await axios.get(`${API}/admin/pages`);
+      setPages(response.data.pages || []);
+      
+      // If no pages exist, create default ones
+      if (response.data.pages.length === 0) {
+        const defaultPages = [
+          { page_id: 'about', title: 'About', content: 'Tell your story here...' },
+          { page_id: 'contact', title: 'Contact', content: 'Contact information goes here...' }
+        ];
+        setPages(defaultPages);
+      }
+    } catch (error) {
+      console.error('Error fetching pages:', error);
+      // Set default pages on error
+      setPages([
+        { page_id: 'about', title: 'About', content: 'Tell your story here...' },
+        { page_id: 'contact', title: 'Contact', content: 'Contact information goes here...' }
+      ]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="text-center">
+        <p className="body-text">Loading pages...</p>
+      </div>
+    );
+  }
+
+  return (
+    <div>
+      <div className="mb-xl">
+        <h2 className="section-title mb-md">Page Content Management</h2>
+        <p className="body-text">Edit the content for your website pages.</p>
+      </div>
+
+      <div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 'var(--spacing-lg)'}}>
+        {pages.map((page, index) => (
+          <div key={page.page_id || index} className="card-artworld">
+            <div style={{padding: 'var(--spacing-lg)'}}>
+              <h3 className="artist-name mb-md">{page.title} Page</h3>
+              <p className="caption-text mb-lg" style={{height: '60px', overflow: 'hidden'}}>
+                {page.content?.substring(0, 100)}...
+              </p>
+              <button 
+                onClick={() => setEditingPage(page)}
+                className="btn-primary"
+                style={{width: '100%'}}
+              >
+                Edit {page.title}
+              </button>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Edit Page Modal */}
+      {editingPage && (
+        <EditPageModal 
+          page={editingPage}
+          onClose={() => setEditingPage(null)}
+          onSave={fetchPages}
+        />
+      )}
+    </div>
+  );
+};
+
+// Edit Page Modal
+const EditPageModal = ({ page, onClose, onSave }) => {
+  const [formData, setFormData] = useState({
+    page_id: page.page_id,
+    title: page.title,
+    content: page.content || ''
+  });
+  const [saving, setSaving] = useState(false);
+
+  const handleSave = async () => {
+    setSaving(true);
+    try {
+      await axios.put(`${API}/admin/pages/${page.page_id}`, formData);
+      onSave();
+      onClose();
+    } catch (error) {
+      console.error('Error updating page:', error);
+      alert('Failed to update page. Please try again.');
+    }
+    setSaving(false);
+  };
+
+  return (
+    <div style={{
+      position: 'fixed',
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      backgroundColor: 'rgba(0,0,0,0.5)',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      zIndex: 1000
+    }}>
+      <div className="card-artworld" style={{maxWidth: '700px', width: '90%', maxHeight: '90vh', overflow: 'auto'}}>
+        <div style={{padding: 'var(--spacing-xl)'}}>
+          <h2 className="artist-name mb-lg">Edit {page.title} Page</h2>
+          
+          <div className="mb-lg">
+            <label className="nav-link mb-sm" style={{display: 'block'}}>Page Title</label>
+            <input
+              type="text"
+              value={formData.title}
+              onChange={(e) => setFormData({...formData, title: e.target.value})}
+              style={{
+                width: '100%',
+                padding: 'var(--spacing-sm)',
+                border: '1px solid var(--color-gray-300)',
+                borderRadius: '4px',
+                fontFamily: 'var(--font-sans)'
+              }}
+            />
+          </div>
+          
+          <div className="mb-lg">
+            <label className="nav-link mb-sm" style={{display: 'block'}}>Page Content</label>
+            <textarea
+              value={formData.content}
+              onChange={(e) => setFormData({...formData, content: e.target.value})}
+              rows="12"
+              placeholder="Enter your page content here. You can use HTML tags for formatting."
+              style={{
+                width: '100%',
+                padding: 'var(--spacing-sm)',
+                border: '1px solid var(--color-gray-300)',
+                borderRadius: '4px',
+                fontFamily: 'var(--font-sans)',
+                resize: 'vertical'
+              }}
+            />
+          </div>
+          
+          <div style={{display: 'flex', gap: 'var(--spacing-md)', justifyContent: 'flex-end'}}>
+            <button onClick={onClose} className="btn-secondary">
+              Cancel
+            </button>
+            <button 
+              onClick={handleSave} 
+              className="btn-primary"
+              disabled={saving}
+            >
+              {saving ? 'Saving...' : 'Save Changes'}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
 const Analytics = ({ prints, orders }) => {
   const totalCollections = prints.length;
   const totalVariants = prints.reduce((sum, print) => sum + print.variants.length, 0);
