@@ -157,6 +157,18 @@ const PrintManagement = ({ prints, onRefresh }) => {
 const PrintCard = ({ print, onEdit, onRefresh }) => {
   const featuredVariant = print.variants.find(v => v.featured);
   
+  const handleDelete = async () => {
+    if (window.confirm(`Are you sure you want to delete "${print.theme}"? This action cannot be undone.`)) {
+      try {
+        await axios.delete(`${API}/admin/prints/${print.theme_id}`);
+        onRefresh();
+      } catch (error) {
+        console.error('Error deleting print:', error);
+        alert('Failed to delete print. Please try again.');
+      }
+    }
+  };
+  
   return (
     <div className="card-artworld">
       <img 
@@ -175,6 +187,19 @@ const PrintCard = ({ print, onEdit, onRefresh }) => {
           <div style={{display: 'flex', gap: 'var(--spacing-xs)'}}>
             <button onClick={onEdit} className="btn-secondary" style={{padding: '0.5rem 1rem', fontSize: '0.75rem'}}>
               Edit
+            </button>
+            <button 
+              onClick={handleDelete} 
+              className="btn-secondary" 
+              style={{
+                padding: '0.5rem 1rem', 
+                fontSize: '0.75rem',
+                backgroundColor: '#dc2626',
+                color: 'white',
+                borderColor: '#dc2626'
+              }}
+            >
+              Delete
             </button>
           </div>
         </div>
