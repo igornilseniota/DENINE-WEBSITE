@@ -7,6 +7,7 @@ import HomePage from "./components/HomePage";
 import GalleryPage from "./components/GalleryPage";
 import ProductPage from "./components/ProductPage";
 import CartPage from "./components/CartPage";
+import AdminMain from "./components/admin/AdminMain";
 import Footer from "./components/Footer";
 
 function App() {
